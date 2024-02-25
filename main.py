@@ -6,43 +6,7 @@ import PySide6.QtCore as Qc
 from PySide6.QtWidgets import (QApplication, QMainWindow, QFileDialog, QMessageBox, QLabel, QComboBox, QPushButton, QVBoxLayout, QHBoxLayout, QSpinBox, QFileDialog, QStatusBar)
 from PySide6.QtGui import QAction, QPixmap
 
-# -------画像サイズ取得処理----------
-def get_img_size(file_name):
-    if file_name:
-        img = cv2.imread(file_name,cv2.IMREAD_COLOR)
-        height, width, channels = img.shape[:3]
-        print("width: " + str(width))
-        print("height: " + str(height))
-        return height,width
-    else :
-        return None,None
-#----------------------------------
-
-
-
-#-----ドット絵処理------------
-# 減色処理
-def sub_color(src, K):
-    Z = src.reshape((-1,3))     # 次元数を1落とす
-    Z = np.float32(Z)           # float32型に変換
-    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)    # 基準の定義
-    ret, label, center = cv2.kmeans(Z, K, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)    # K-means法で減色
-    center = np.uint8(center)    # UINT8に変換
-    res = center[label.flatten()]
-    return res.reshape((src.shape))    # 配列の次元数と入力画像と同じに戻す
-
-# モザイク処理
-def mosaic(img, alpha):
-    h, w, ch = img.shape
-    img = cv2.resize(img,(int(w*alpha), int(h*alpha)))
-    img = cv2.resize(img,(w,h), interpolation=cv2.INTER_NEAREST)
-    return img
-
-def pixel_art(img, alpha=2 ,K=4):
-    img = mosaic(img,alpha)
-    return sub_color(img, K)
-#-----ドット絵処理ここまで-----
-
+import img_effect as IE
 
 
 class MainWindow(QMainWindow):
@@ -158,7 +122,7 @@ class MainWindow(QMainWindow):
         self.is_open = True
         self.sb_status.showMessage(f'画像入力')
         self.lb_I_01.setText(f'入力画像のディレクトリ{file_name}')
-        img_width, img_hight = get_img_size(file_name)
+        img_width, img_hight = IE.get_img_size(file_name)
         self.lb_I_02.setText(f'入力画像サイズ（ 縦 x 横 ）：{img_width} x {img_hight}')
         self.pre_show_image(file_name)
 
@@ -184,8 +148,8 @@ class MainWindow(QMainWindow):
         # 選択内容の追加：追加順にIDが0から割り振られる
         self.combobox.addItem("選択してください")           # ID: 0
         self.combobox.addItem("ドット絵加工")               # ID: 1
-        self.combobox.addItem("モザイク処理")               # ID: 2
-        self.combobox.addItem("グレースケール処理")         # ID: 3
+        # self.combobox.addItem("モザイク処理")               # ID: 2
+        # self.combobox.addItem("グレースケール処理")         # ID: 3
         # コンボボックスの選択中のIDが変更されたら呼び出す処理
         self.combobox.currentIndexChanged.connect(self.CallbackCurrentindexchangedCombobox)
 
@@ -226,7 +190,7 @@ class MainWindow(QMainWindow):
         K_num = self.spin_box_4.value()
         print(f'img:{img},W x H:{width}x{height}, Alpha:{alpha}, K:{K_num}')
 
-        self.output_img = pixel_art(img,alpha,K_num)
+        self.output_img = IE.pixel_art(img,alpha,K_num)
         cv2.imshow("ouput", self.output_img)
         
 
