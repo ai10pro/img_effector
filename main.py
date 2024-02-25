@@ -54,11 +54,11 @@ class MainWindow(QMainWindow):
         self.lb_3.setGeometry(1320,155,50,25)
         self.spin_box_1 = QSpinBox(self)
         self.spin_box_1.setSingleStep(1)
-        self.spin_box_1.setRange(1,1920)
+        self.spin_box_1.setRange(16,3840)
         self.spin_box_1.setGeometry(1375,130,100,25)
         self.spin_box_2 = QSpinBox(self)
         self.spin_box_2.setSingleStep(1)
-        self.spin_box_2.setRange(1,1080)
+        self.spin_box_2.setRange(16,2160)
         self.spin_box_2.setGeometry(1375,155,100,25)
 
         self.lb_4 = QLabel(self)
@@ -123,6 +123,8 @@ class MainWindow(QMainWindow):
         self.sb_status.showMessage(f'画像入力')
         self.lb_I_01.setText(f'入力画像のディレクトリ{file_name}')
         img_width, img_hight = IE.get_img_size(file_name)
+        self.spin_box_1.setValue(img_hight)
+        self.spin_box_2.setValue(img_width)
         self.lb_I_02.setText(f'入力画像サイズ（ 縦 x 横 ）：{img_width} x {img_hight}')
         self.pre_show_image(file_name)
 
@@ -161,6 +163,7 @@ class MainWindow(QMainWindow):
         if select_num == 0:                             # ID=0 の時、インフォメーション表示
             QMessageBox.information(self,"編集内容選択のインフォメーション","編集内容を選択してください")
         elif select_num == 1:                           # ID=1 の時、ドット処理用のグループUI表示の関数を実行
+            self.sb_status.showMessage(f'変換処理実行')
             self.Set_dot_input()
             print(1)
         elif select_num == 2:                           # ID=2 の時、モザイク処理用のグループUI表示の関数を実行
@@ -182,7 +185,6 @@ class MainWindow(QMainWindow):
     
 
     def Play_button_clicked(self):
-        self.sb_status.showMessage(f'変換処理実行')
         img = cv2.imread(self.open_file_name)
         width = self.spin_box_1.value()
         height = self.spin_box_2.value()
