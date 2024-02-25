@@ -191,7 +191,8 @@ class MainWindow(QMainWindow):
         print(f'img:{img},W x H:{width}x{height}, Alpha:{alpha}, K:{K_num}')
 
         self.output_img = IE.pixel_art(img,alpha,K_num)
-        cv2.imshow("ouput", self.output_img)
+        self.end_img = IE.img_resize(self.output_img,width,height)
+        cv2.imshow("ouput", self.end_img)
         
 
     def Save_button_clicked(self):
@@ -209,7 +210,7 @@ class MainWindow(QMainWindow):
         if path[10] == '':
             return
         else :
-            self.save_image(path,self.output_img)
+            self.save_image(path,self.end_img)
         
     def save_image(self,path,img):
         fn = path

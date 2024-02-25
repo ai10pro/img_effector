@@ -37,3 +37,8 @@ def pixel_art(img, alpha=2 ,K=4):
     img = mosaic(img,alpha)
     return sub_color(img, K)
 #-----ドット絵処理ここまで-----
+
+#------画像サイズ変更処理-------
+def img_resize(img,width,hight):
+    imd_ds = cv2.resize(img,(width,hight))
+    return imd_ds
