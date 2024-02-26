@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
         self.lb_I_01.setText('入力画像のディレクトリ')
         self.lb_I_01.setGeometry(50,740,700,25)
         self.lb_I_02 = QLabel(self)
-        self.lb_I_02.setText('入力画像サイズ（ 縦 x 横 ）：')
+        self.lb_I_02.setText('入力画像サイズ（ 横 x 縦 ）：')
         self.lb_I_02.setGeometry(50,765,500,25)
 
 
@@ -47,18 +47,18 @@ class MainWindow(QMainWindow):
         self.lb_1.setText('出力解像度の指定')
         self.lb_1.setGeometry(1300,100,280,30)
         self.lb_2 = QLabel(self)
-        self.lb_2.setText('出力X値:')
+        self.lb_2.setText('出力横:')
         self.lb_2.setGeometry(1320,130,50,25)
         self.lb_3 = QLabel(self)
-        self.lb_3.setText('出力Y値:')
+        self.lb_3.setText('出力縦:')
         self.lb_3.setGeometry(1320,155,50,25)
         self.spin_box_1 = QSpinBox(self)
         self.spin_box_1.setSingleStep(1)
-        self.spin_box_1.setRange(16,3840)
+        self.spin_box_1.setRange(16,4032)
         self.spin_box_1.setGeometry(1375,130,100,25)
         self.spin_box_2 = QSpinBox(self)
         self.spin_box_2.setSingleStep(1)
-        self.spin_box_2.setRange(16,2160)
+        self.spin_box_2.setRange(16,3024)
         self.spin_box_2.setGeometry(1375,155,100,25)
 
         self.lb_4 = QLabel(self)
@@ -122,10 +122,10 @@ class MainWindow(QMainWindow):
         self.is_open = True
         self.sb_status.showMessage(f'画像入力')
         self.lb_I_01.setText(f'入力画像のディレクトリ{file_name}')
-        img_width, img_hight = IE.get_img_size(file_name)
-        self.spin_box_1.setValue(img_hight)
-        self.spin_box_2.setValue(img_width)
-        self.lb_I_02.setText(f'入力画像サイズ（ 縦 x 横 ）：{img_width} x {img_hight}')
+        img_hight, img_width = IE.get_img_size(file_name)
+        self.spin_box_1.setValue(img_width)
+        self.spin_box_2.setValue(img_hight)
+        self.lb_I_02.setText(f'入力画像サイズ（ 横 x 縦 ）：{img_width} x {img_hight}')
         self.pre_show_image(file_name)
 
     # 読み込み画像の表示
